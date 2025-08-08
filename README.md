@@ -91,4 +91,5 @@
 - task3:` UI Components + Themes -> ismail ayman`   
 - task4: `UI Navigation + Screens -> Ebrahim Gamal`                    
 - task5:`ViewModels`   
-- task6:`Utilities + mainactivity -> shorouk saffan`   
+- task6:`Utilities + mainactivity -> shorouk saffan`
+- task7:`Testing, Demo Video, and Final Merge to master`
