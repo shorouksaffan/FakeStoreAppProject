@@ -16,7 +16,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
 @Composable
 fun AppContent() {
     FakeStoreAppProjectTheme {
