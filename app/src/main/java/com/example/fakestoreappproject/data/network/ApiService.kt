@@ -4,10 +4,11 @@ import com.example.fakestoreappproject.data.model.Category
 import com.example.fakestoreappproject.data.model.Product
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ApiService {
     @GET("products")
-    suspend fun getProducts(): List<Product>
+    suspend fun getProducts(@Query("limit") limit: Int, @Query("offset") offset: Int): List<Product>
 
     @GET("categories")
     suspend fun getCategories(): List<Category>

@@ -18,9 +18,9 @@ class ProductRepositoryImpl(
         cartDao = db.cartDao()
     }
 
-    override suspend fun getProducts(): ApiResult<List<Product>> {
+    override suspend fun getProducts(offset: Int, limit: Int): ApiResult<List<Product>> {
         return try {
-            val products = RetrofitClient.apiService.getProducts()
+            val products = RetrofitClient.apiService.getProducts(limit, offset)
             ApiResult.Success(products)
         } catch (e: Exception) {
             ApiResult.Error(e)

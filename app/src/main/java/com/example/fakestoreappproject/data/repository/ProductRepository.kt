@@ -5,7 +5,7 @@ import com.example.fakestoreappproject.data.model.Product
 import com.example.fakestoreappproject.data.network.ApiResult
 
 interface ProductRepository {
-    suspend fun getProducts(): ApiResult<List<Product>>
+    suspend fun getProducts(offset: Int, limit: Int): ApiResult<List<Product>>
 
     suspend fun getProductById(id: Int): ApiResult<Product>
 
