@@ -13,6 +13,9 @@
 - `master` – Final stable code
 - `dev` – Shared development branch
 - `feature/*` – Each team member’s task
+  
+---
+# Architecture Implementation Guide
 
 ## 1. Data Layer (`/data`)
 **Purpose**: Handles all data operations (local + remote)
