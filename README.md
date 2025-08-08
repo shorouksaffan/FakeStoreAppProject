@@ -7,6 +7,12 @@
 - Add items to **local cart** (Room Database)
 - Browse by categories
 
+---
+## Branch Strategy
+
+- `master` – Final stable code
+- `dev` – Shared development branch
+- `feature/*` – Each team member’s task
 
 ## 1. Data Layer (`/data`)
 **Purpose**: Handles all data operations (local + remote)
