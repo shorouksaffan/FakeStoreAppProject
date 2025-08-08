@@ -77,6 +77,10 @@
 - `NetworkMonitor.kt` - Internet connection observer
 - `Resource.kt` - Standard API response wrapper
 
+---
+## Project Coordination
+
+- Repository setup, README, branch strategy (`dev` / `feature/*` / `master`), and task distribution were handled by **Shorouk Saffan**.
 
 ---
 
