@@ -90,6 +90,7 @@ dependencies {
 
     // Image Loading
     implementation(libs.coil.compose)
+    implementation(libs.ui.graphics)
 
     // Testing
     testImplementation(libs.junit)
