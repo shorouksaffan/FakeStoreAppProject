@@ -56,22 +56,22 @@
 - `Type.kt` - Typography
 - `Theme.kt` - MaterialTheme configuration
 
----
 
-## 3. ViewModels (`/viewmodels`)
+### ViewModels (`/viewmodels`)
 **Purpose**: Manage screen-specific state and logic
 - `ProductListViewModel.kt` - Handles product listing
 - `ProductDetailViewModel.kt` - Manages product details
 - `CategoryViewModel.kt` - Category operations
 - `CartViewModel.kt` - Cart state management
 
-## 4. Utilities (`/utils`)
+### Utilities (`/utils`)
 - `NetworkMonitor.kt` - Internet connection observer
 - `Resource.kt` - Standard API response wrapper
 
 
+---
 
-## Team Roles
+# Team Roles
 
 - task1:`local` , `model`          
 - task2:`Network + Paging + Repository`            
