@@ -90,7 +90,7 @@
 - task2:`Network + Paging + Repository -> eslam magdy`            
 - task3:` UI Components + Themes -> ismail ayman`   
 - task4: `Screens -> Ebrahim Gamal`
-- task4: `UI Navigation -> Mohamed Mostafa`                    
-- task5:`ViewModels -> eslam magdy`   
-- task6:`Utilities + mainactivity -> shorouk saffan`
-- task7:`Testing, Demo Video, and Final Merge to master`
+- task5: `UI Navigation -> Mohamed Mostafa`                    
+- task6:`ViewModels -> eslam magdy`   
+- task7:`Utilities + mainactivity -> shorouk saffan`
+- task8:`Testing, Demo Video, and Final Merge to master`
