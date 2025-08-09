@@ -2,14 +2,14 @@ package com.example.fakestoreappproject.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.fakestoreappproject.data.model.Product
+import com.example.fakestoreappproject.data.model.CartItem
 import com.example.fakestoreappproject.data.repository.ProductRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 sealed class CartState {
-    data class Success(val products: List<Product>) : CartState()
+    data class Success(val cartItems: List<CartItem>) : CartState()
     data class Error(val message: String) : CartState()
     object Loading : CartState()
 }
@@ -21,26 +21,67 @@ class CartViewModel(
     private val _cartState = MutableStateFlow<CartState>(CartState.Loading)
     val cartState: StateFlow<CartState> = _cartState
 
-    fun getCartProducts() {
+    fun addCartItem(cartItem: CartItem) {
         viewModelScope.launch {
-            _cartState.value = CartState.Loading
             try {
-                val products = productRepository.getCartProducts()
-                _cartState.value = CartState.Success(products)
+                productRepository.addCartItem(cartItem)
+                _cartState.value = CartState.Success(productRepository.getCartItems())
             } catch (e: Exception) {
                 _cartState.value = CartState.Error(e.message ?: "Unknown error")
             }
         }
     }
 
-    fun addProductToCart(product: Product) {
+    fun getCartItems() {
         viewModelScope.launch {
+            _cartState.value = CartState.Loading
             try {
-                productRepository.addProductToCart(product)
-                getCartProducts()
+                val items = productRepository.getCartItems()
+                _cartState.value = CartState.Success(items)
             } catch (e: Exception) {
                 _cartState.value = CartState.Error(e.message ?: "Unknown error")
             }
         }
+    }
+
+    fun deleteCartItem(productId: Int) {
+        viewModelScope.launch {
+            try {
+                productRepository.deleteCartItem(productId)
+                _cartState.value = CartState.Success(productRepository.getCartItems())
+            } catch (e: Exception) {
+                _cartState.value = CartState.Error(e.message ?: "Unknown error")
+            }
+        }
+    }
+
+    fun clearCart() {
+        viewModelScope.launch {
+            try {
+                productRepository.clearCart()
+                _cartState.value = CartState.Success(emptyList())
+            } catch (e: Exception) {
+                _cartState.value = CartState.Error(e.message ?: "Unknown error")
+            }
+        }
+    }
+
+    fun updateCartItemQuantity(productId: Int, quantity: Int) {
+        viewModelScope.launch {
+            try {
+                productRepository.updateCartItemQuantity(productId, quantity)
+                _cartState.value = CartState.Success(productRepository.getCartItems())
+            } catch (e: Exception) {
+                _cartState.value = CartState.Error(e.message ?: "Unknown error")
+            }
+        }
+    }
+
+    suspend fun getTotalItemsInCart(): Int {
+        return productRepository.getTotalItemsInCart()
+    }
+
+    suspend fun getTotalPriceInCart(): Double {
+        return productRepository.getTotalPriceInCart()
     }
 }
