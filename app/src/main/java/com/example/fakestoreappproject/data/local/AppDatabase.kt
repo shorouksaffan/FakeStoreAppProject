@@ -5,10 +5,11 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.example.fakestoreappproject.data.model.CartItem
 import com.example.fakestoreappproject.data.model.Product
 
-@Database(entities = [Product::class], version = 1)
-@TypeConverters(ImagesConverter::class, CategoryConverter::class)
+@Database(entities = [CartItem::class], version = 1)
+@TypeConverters(ProductConverter::class, CategoryConverter::class, ImagesConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun cartDao(): CartDao
 
