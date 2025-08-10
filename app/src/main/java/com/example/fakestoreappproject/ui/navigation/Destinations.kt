@@ -19,4 +19,7 @@ sealed interface Destinations : Graph {
 
     @Serializable
     data class ProductDetailScreen(val productId: Int) : Destination
+
+    @Serializable
+    data object CategoriesScreen : Destination
 }

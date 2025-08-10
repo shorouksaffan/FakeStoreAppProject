@@ -100,6 +100,7 @@ fun ProductListScreenSuccessContent(
         }
         return
     }
+
     val lazyPagingItems = products.collectAsLazyPagingItems()
     Scaffold(
         floatingActionButton = {

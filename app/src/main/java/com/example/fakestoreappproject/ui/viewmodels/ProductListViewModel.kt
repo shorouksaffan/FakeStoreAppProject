@@ -68,6 +68,8 @@ class ProductListViewModel(
     }
 
     fun onCategoriesClick() {
-        //TODO
+        viewModelScope.launch {
+            navigator.navigate(Destinations.CategoriesScreen)
+        }
     }
 }

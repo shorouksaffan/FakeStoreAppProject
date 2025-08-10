@@ -20,6 +20,10 @@ class CategoryViewModel(private val productRepository: ProductRepository) : View
     private val _categoryState = MutableStateFlow<CategoryState>(CategoryState.Loading)
     val categoryState: StateFlow<CategoryState> = _categoryState
 
+    init {
+        getCategories()
+    }
+
     fun getCategories() {
         viewModelScope.launch {
             _categoryState.value = CategoryState.Loading
@@ -32,5 +36,9 @@ class CategoryViewModel(private val productRepository: ProductRepository) : View
                 }
             }
         }
+    }
+
+    fun onCategoryClick(category: Category) {
+        //TODO
     }
 }
