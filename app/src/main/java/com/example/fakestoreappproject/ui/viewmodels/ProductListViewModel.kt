@@ -6,6 +6,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.example.fakestoreappproject.data.model.CartItem
 import com.example.fakestoreappproject.data.model.Product
 import com.example.fakestoreappproject.data.paging.ProductPagingSource
 import com.example.fakestoreappproject.data.repository.ProductRepository
@@ -64,7 +65,23 @@ class ProductListViewModel(
     }
 
     fun onAddToCart(product: Product) {
-        //TODO
+        viewModelScope.launch {
+            val cartItem = productRepository.getCartItemByProductId(product.id)
+            if (cartItem != null) {
+                productRepository.updateCartItemQuantity(cartItem.product.id, cartItem.quantity + 1)
+            } else {
+                productRepository.addCartItem(
+                    CartItem(
+                        id = 0,
+                        product = product,
+                        quantity = 1,
+                    )
+                )
+            }
+            navigator.navigate(
+                Destinations.CartScreen
+            )
+        }
     }
 
     fun onCategoriesClick() {
