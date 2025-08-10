@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import com.example.fakestoreappproject.ui.screens.CategoriesScreen
+import com.example.fakestoreappproject.ui.screens.CategoryProductsScreen
 import com.example.fakestoreappproject.ui.screens.ProductDetailScreen
 import com.example.fakestoreappproject.ui.screens.ProductListScreen
 import org.koin.compose.koinInject
@@ -41,5 +42,6 @@ fun NavGraphBuilder.buildFakeStoreAppNavGraph() {
         composable<Destinations.ProductListScreen> { ProductListScreen() }
         composable<Destinations.ProductDetailScreen> { ProductDetailScreen() }
         composable<Destinations.CategoriesScreen> { CategoriesScreen() }
+        composable<Destinations.CategoryProductScreen> { CategoryProductsScreen() }
     }
 }
