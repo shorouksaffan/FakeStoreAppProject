@@ -64,7 +64,7 @@ class ProductRepositoryImpl(
         cartDao.clearCart()
     }
 
-    override suspend fun getCartItemByProductId(productId: Int): CartItem {
+    override suspend fun getCartItemByProductId(productId: Int): CartItem? {
         return cartDao.getCartItemByProductId(productId)
     }
 

@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.example.fakestoreappproject.data.model.CartItem
 import com.example.fakestoreappproject.data.model.Product
 import com.example.fakestoreappproject.data.network.ApiResult
 import com.example.fakestoreappproject.data.repository.ProductRepository
@@ -63,6 +64,22 @@ class CategoryProductViewModel(
     }
 
     fun onAddToCart(product: Product) {
-        //TODO
+        viewModelScope.launch {
+            val cartItem = productRepository.getCartItemByProductId(product.id)
+            if (cartItem != null) {
+                productRepository.updateCartItemQuantity(cartItem.product.id, cartItem.quantity + 1)
+            } else {
+                productRepository.addCartItem(
+                    CartItem(
+                        id = 0,
+                        product = product,
+                        quantity = 1,
+                    )
+                )
+            }
+            navigator.navigate(
+                Destinations.CartScreen
+            )
+        }
     }
 }

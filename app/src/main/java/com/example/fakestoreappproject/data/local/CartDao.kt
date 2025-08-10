@@ -2,12 +2,13 @@ package com.example.fakestoreappproject.data.local
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.fakestoreappproject.data.model.CartItem
 
 @Dao
 interface CartDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addCartItem(cartItem: CartItem)
 
     @Query("SELECT * FROM cart_items")
@@ -20,7 +21,7 @@ interface CartDao {
     suspend fun clearCart()
 
     @Query("SELECT * FROM cart_items WHERE product_id = :productId")
-    suspend fun getCartItemByProductId(productId: Int): CartItem
+    suspend fun getCartItemByProductId(productId: Int): CartItem?
 
     @Query("SELECT COUNT(*) FROM cart_items WHERE product_id = :productId")
     suspend fun isProductInCart(productId: Int): Int

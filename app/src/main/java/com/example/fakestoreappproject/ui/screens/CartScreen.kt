@@ -81,7 +81,7 @@ private fun CartScreenContent(state: CartState, onRemove: (CartItem) -> Unit) {
 
 @Composable
 fun CartScreenSuccessContent(cartItems: List<CartItem>, onRemove: (CartItem) -> Unit) {
-    val total = cartItems.sumOf { it.product.price * it.quantity }
+    val total = cartItems.sumOf { it.product.price * it.quantity }.toFloat()
 
     Scaffold(
         containerColor = Color(0xFFE8EAF6),
