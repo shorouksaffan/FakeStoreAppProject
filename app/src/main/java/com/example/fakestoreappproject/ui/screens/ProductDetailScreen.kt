@@ -1,5 +1,6 @@
 package com.example.fakestoreappproject.ui.screens
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,10 +15,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddShoppingCart
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,15 +31,57 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.example.fakestoreappproject.data.model.Category
 import com.example.fakestoreappproject.data.model.Product
+import com.example.fakestoreappproject.ui.viewmodels.ProductDetailViewModel
+import com.example.fakestoreappproject.ui.viewmodels.ProductDetailsState
+import org.koin.compose.viewmodel.koinViewModel
 
 
 @Composable
 fun ProductDetailScreen(
+    viewModel: ProductDetailViewModel = koinViewModel()
+) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    ProductDetailScreenContent(
+        state = state,
+        onAddToCart = viewModel::onAddToCart
+    )
+}
+
+@Composable
+private fun ProductDetailScreenContent(
+    state: ProductDetailsState,
+    onAddToCart: (Product) -> Unit
+) {
+    when (state) {
+        is ProductDetailsState.Loading -> {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
+        }
+
+        is ProductDetailsState.Error -> {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text("Error loading product details")
+            }
+        }
+
+        is ProductDetailsState.Success -> {
+            ProductDetailScreenSuccessContent(
+                product = state.product,
+                onAddToCart = onAddToCart
+            )
+        }
+    }
+}
+
+@Composable
+fun ProductDetailScreenSuccessContent(
     product: Product,
-    onAddToCart: () -> Unit
+    onAddToCart: (Product) -> Unit
 ) {
     Scaffold(
         containerColor = Color(0xFFE8EAF6)
@@ -65,13 +110,13 @@ fun ProductDetailScreen(
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
-                color = Color(0xFF4A148C) // dark purple title
+                color = Color(0xFF4A148C)
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = "$${product.price}",
                 fontSize = 20.sp,
-                color = Color(0xFFFB8C00), // warm orange price
+                color = Color(0xFFFB8C00),
                 fontWeight = FontWeight.SemiBold
             )
             Spacer(modifier = Modifier.height(30.dp))
@@ -83,7 +128,7 @@ fun ProductDetailScreen(
             )
             Spacer(modifier = Modifier.height(100.dp))
             Button(
-                onClick = onAddToCart,
+                onClick = { onAddToCart(product) },
                 modifier = Modifier.fillMaxWidth(0.6f),
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFF3E0))
             ) {
@@ -126,7 +171,7 @@ fun ProductDetailScreenPreview() {
         updatedAt = ""
     )
 
-    ProductDetailScreen(
+    ProductDetailScreenSuccessContent(
         product = sampleProduct,
         onAddToCart = {}
     )

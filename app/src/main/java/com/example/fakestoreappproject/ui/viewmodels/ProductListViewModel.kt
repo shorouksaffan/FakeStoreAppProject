@@ -17,7 +17,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class ProductListViewModel(private val productRepository: ProductRepository, private val navigator: Navigator) :
+class ProductListViewModel(
+    private val productRepository: ProductRepository,
+    private val navigator: Navigator
+) :
     ViewModel() {
 
     val productsFlow: Flow<PagingData<Product>> = Pager(
@@ -53,7 +56,11 @@ class ProductListViewModel(private val productRepository: ProductRepository, pri
     }
 
     fun onProductClick(product: Product) {
-        //TODO
+        viewModelScope.launch {
+            navigator.navigate(
+                Destinations.ProductDetailScreen(product.id)
+            )
+        }
     }
 
     fun onAddToCart(product: Product) {
