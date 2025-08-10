@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 sealed class CartState {
     data class Success(val cartItems: List<CartItem>) : CartState()
     data class Error(val message: String) : CartState()
-    object Loading : CartState()
+    data object Loading : CartState()
 }
 
 class CartViewModel(
@@ -20,6 +20,10 @@ class CartViewModel(
 
     private val _cartState = MutableStateFlow<CartState>(CartState.Loading)
     val cartState: StateFlow<CartState> = _cartState
+
+    init {
+        getCartItems()
+    }
 
     fun addCartItem(cartItem: CartItem) {
         viewModelScope.launch {
@@ -44,10 +48,10 @@ class CartViewModel(
         }
     }
 
-    fun deleteCartItem(productId: Int) {
+    fun deleteCartItem(cartItem: CartItem) {
         viewModelScope.launch {
             try {
-                productRepository.deleteCartItem(productId)
+                productRepository.deleteCartItem(cartItem.product.id)
                 _cartState.value = CartState.Success(productRepository.getCartItems())
             } catch (e: Exception) {
                 _cartState.value = CartState.Error(e.message ?: "Unknown error")

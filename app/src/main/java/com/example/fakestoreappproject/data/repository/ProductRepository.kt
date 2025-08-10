@@ -22,7 +22,7 @@ interface ProductRepository {
 
     suspend fun clearCart()
 
-    suspend fun getCartItemByProductId(productId: Int): CartItem
+    suspend fun getCartItemByProductId(productId: Int): CartItem?
 
     suspend fun isProductInCart(productId: Int): Int
 

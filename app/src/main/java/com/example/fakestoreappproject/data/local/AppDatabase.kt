@@ -6,7 +6,6 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.fakestoreappproject.data.model.CartItem
-import com.example.fakestoreappproject.data.model.Product
 
 @Database(entities = [CartItem::class], version = 1)
 @TypeConverters(ProductConverter::class, CategoryConverter::class, ImagesConverter::class)

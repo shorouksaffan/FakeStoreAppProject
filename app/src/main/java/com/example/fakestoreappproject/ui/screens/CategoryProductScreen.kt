@@ -24,11 +24,59 @@ import coil.compose.AsyncImage
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddShoppingCart
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.text.style.TextAlign
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.fakestoreappproject.ui.viewmodels.CategoryProductState
+import com.example.fakestoreappproject.ui.viewmodels.CategoryProductViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun CategoryProductsScreen(
+    viewModel: CategoryProductViewModel = koinViewModel()
+) {
+    val state by viewModel.categoryProductState.collectAsStateWithLifecycle()
+    CategoryProductsScreenContent(
+        state = state,
+        onProductClick = viewModel::onProductClick,
+        onAddToCart = viewModel::onAddToCart
+    )
+}
+
+@Composable
+private fun CategoryProductsScreenContent(
+    state: CategoryProductState,
+    onProductClick: (Product) -> Unit,
+    onAddToCart: (Product) -> Unit
+) {
+    when (state) {
+        is CategoryProductState.Loading -> {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
+        }
+
+        is CategoryProductState.Error -> {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text("Error loading products")
+            }
+        }
+
+        is CategoryProductState.Success -> {
+            CategoryProductsScreenSuccessContent(
+                categoryName = state.categoryName,
+                products = state.products,
+                onProductClick = onProductClick,
+                onAddToCart = onAddToCart
+            )
+        }
+    }
+}
+
+@Composable
+private fun CategoryProductsScreenSuccessContent(
     categoryName: String,
     products: List<Product>,
     onProductClick: (Product) -> Unit,
@@ -95,6 +143,7 @@ fun CategoryProductsScreen(
         }
     }
 }
+
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun CategoryProductsScreenPreview() {
@@ -139,7 +188,7 @@ fun CategoryProductsScreenPreview() {
         )
     )
 
-    CategoryProductsScreen(
+    CategoryProductsScreenSuccessContent(
         categoryName = sampleCategoryName,
         products = sampleProducts,
         onProductClick = {},

@@ -6,6 +6,8 @@ import com.example.fakestoreappproject.data.model.Category
 import com.example.fakestoreappproject.data.model.Product
 import com.example.fakestoreappproject.data.network.ApiResult
 import com.example.fakestoreappproject.data.repository.ProductRepository
+import com.example.fakestoreappproject.ui.navigation.Destinations
+import com.example.fakestoreappproject.ui.navigation.Navigator
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -16,9 +18,13 @@ sealed class CategoryState {
     object Loading : CategoryState()
 }
 
-class CategoryViewModel(private val productRepository: ProductRepository) : ViewModel() {
+class CategoryViewModel(private val productRepository: ProductRepository, private val navigator: Navigator) : ViewModel() {
     private val _categoryState = MutableStateFlow<CategoryState>(CategoryState.Loading)
     val categoryState: StateFlow<CategoryState> = _categoryState
+
+    init {
+        getCategories()
+    }
 
     fun getCategories() {
         viewModelScope.launch {
@@ -31,6 +37,17 @@ class CategoryViewModel(private val productRepository: ProductRepository) : View
                     _categoryState.value = CategoryState.Error(result.exception.message ?: "Unknown error")
                 }
             }
+        }
+    }
+
+    fun onCategoryClick(category: Category) {
+        viewModelScope.launch {
+            navigator.navigate(
+                Destinations.CategoryProductScreen(
+                    categoryId = category.id,
+                    categoryName = category.name
+                )
+            )
         }
     }
 }
