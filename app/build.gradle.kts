@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -64,7 +65,9 @@ dependencies {
     implementation(libs.coil.compose.v240)
     // Room Database
     implementation (libs.androidx.room.runtime)
-    implementation (libs.androidx.room.ktx )// For Coroutines support
+    implementation (libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
+    annotationProcessor(libs.androidx.room.compiler)
     // Paging Library for lazy loading/compose integration
     implementation(libs.androidx.paging.compose)
     implementation(libs.androidx.paging.runtime.ktx)
@@ -90,6 +93,7 @@ dependencies {
 
     // Image Loading
     implementation(libs.coil.compose)
+    implementation(libs.ui.graphics)
 
     // Testing
     testImplementation(libs.junit)
@@ -101,5 +105,14 @@ dependencies {
     // Debug tools
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+
+    implementation(libs.androidx.material.icons.extended)
+
+    //Koin
+    implementation(libs.koin.core)
+    implementation(libs.koin.compose)
+    implementation(libs.koin.compose.viewmodel)
+    implementation(libs.koin.android)
 
 }
