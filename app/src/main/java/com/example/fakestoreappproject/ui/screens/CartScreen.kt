@@ -44,7 +44,10 @@ import com.example.fakestoreappproject.data.model.Product
 import com.example.fakestoreappproject.ui.viewmodels.CartState
 import com.example.fakestoreappproject.ui.viewmodels.CartViewModel
 import org.koin.compose.viewmodel.koinViewModel
-
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 @Composable
 fun CartScreen(
     viewModel: CartViewModel = koinViewModel()
@@ -54,27 +57,41 @@ fun CartScreen(
 }
 
 @Composable
-private fun CartScreenContent(state: CartState, onRemove: (CartItem) -> Unit) {
+private fun CartScreenContent(
+    state: CartState,
+    onRemove: (CartItem) -> Unit
+) {
+    val snackbarHostState = remember { SnackbarHostState() }
 
-    when (state) {
-        is CartState.Error -> {
-            // Handle error state, show a message or retry button
-            Text(text = "Error loading cart: ${state.message}")
-        }
-
-        CartState.Loading -> {
-            // Show a loading indicator while cart is being fetched
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
+    Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) }
+    ) { paddingValues ->
+        when (state) {
+            is CartState.Error -> {
+                LaunchedEffect(Unit) {
+                    snackbarHostState.showSnackbar(
+                        message = "Error loading cart: ${state.message}"
+                    )
+                }
             }
-        }
 
-        is CartState.Success -> {
-            // Render the cart items
-            CartScreenSuccessContent(
-                cartItems = state.cartItems,
-                onRemove = onRemove
-            )
+            CartState.Loading -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
+
+            is CartState.Success -> {
+                CartScreenSuccessContent(
+                    cartItems = state.cartItems,
+                    onRemove = onRemove
+                )
+            }
         }
     }
 }

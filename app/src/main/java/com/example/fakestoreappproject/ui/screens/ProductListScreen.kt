@@ -46,6 +46,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.map
 import org.koin.compose.viewmodel.koinViewModel
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 
 @Composable
 fun ProductListScreen(
@@ -63,26 +67,39 @@ private fun ProductListScreenContent(
     state: Resource<Flow<PagingData<Product>>>,
     viewModel: ProductListViewModel
 ) {
-    when (state) {
-        is Resource.Loading -> {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
-            }
-        }
+    val snackbarHostState = remember { SnackbarHostState() }
 
-        is Resource.Error -> {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("Error loading products")
+    Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) }
+    ) { paddingValues ->
+        when (state) {
+            is Resource.Loading -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
             }
-        }
 
-        is Resource.Success -> {
-            ProductListScreenSuccessContent(
-                products = state.data,
-                onProductClick = viewModel::onProductClick,
-                onAddToCart = viewModel::onAddToCart,
-                onCategoriesClick = viewModel::onCategoriesClick
-            )
+            is Resource.Error -> {
+                LaunchedEffect(Unit) {
+                    snackbarHostState.showSnackbar(
+                        message = "Error loading products"
+                    )
+                }
+            }
+
+            is Resource.Success -> {
+                ProductListScreenSuccessContent(
+                    products = state.data,
+                    onProductClick = viewModel::onProductClick,
+                    onAddToCart = viewModel::onAddToCart,
+                    onCategoriesClick = viewModel::onCategoriesClick
+                )
+            }
         }
     }
 }

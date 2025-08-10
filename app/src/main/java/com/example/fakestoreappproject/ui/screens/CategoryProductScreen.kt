@@ -32,7 +32,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.fakestoreappproject.ui.viewmodels.CategoryProductState
 import com.example.fakestoreappproject.ui.viewmodels.CategoryProductViewModel
 import org.koin.compose.viewmodel.koinViewModel
-
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 @Composable
 fun CategoryProductsScreen(
     viewModel: CategoryProductViewModel = koinViewModel()
@@ -51,26 +57,39 @@ private fun CategoryProductsScreenContent(
     onProductClick: (Product) -> Unit,
     onAddToCart: (Product) -> Unit
 ) {
-    when (state) {
-        is CategoryProductState.Loading -> {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
-            }
-        }
+    val snackbarHostState = remember { SnackbarHostState() }
 
-        is CategoryProductState.Error -> {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("Error loading products")
+    Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) }
+    ) { paddingValues ->
+        when (state) {
+            is CategoryProductState.Loading -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
             }
-        }
 
-        is CategoryProductState.Success -> {
-            CategoryProductsScreenSuccessContent(
-                categoryName = state.categoryName,
-                products = state.products,
-                onProductClick = onProductClick,
-                onAddToCart = onAddToCart
-            )
+            is CategoryProductState.Error -> {
+                LaunchedEffect(Unit) {
+                    snackbarHostState.showSnackbar(
+                        message = "Error loading products"
+                    )
+                }
+            }
+
+            is CategoryProductState.Success -> {
+                CategoryProductsScreenSuccessContent(
+                    categoryName = state.categoryName,
+                    products = state.products,
+                    onProductClick = onProductClick,
+                    onAddToCart = onAddToCart
+                )
+            }
         }
     }
 }

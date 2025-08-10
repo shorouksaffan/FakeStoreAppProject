@@ -38,7 +38,10 @@ import com.example.fakestoreappproject.data.model.Product
 import com.example.fakestoreappproject.ui.viewmodels.ProductDetailViewModel
 import com.example.fakestoreappproject.ui.viewmodels.ProductDetailsState
 import org.koin.compose.viewmodel.koinViewModel
-
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 
 @Composable
 fun ProductDetailScreen(
@@ -56,24 +59,37 @@ private fun ProductDetailScreenContent(
     state: ProductDetailsState,
     onAddToCart: (Product) -> Unit
 ) {
-    when (state) {
-        is ProductDetailsState.Loading -> {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
-            }
-        }
+    val snackbarHostState = remember { SnackbarHostState() }
 
-        is ProductDetailsState.Error -> {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("Error loading product details")
+    Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) }
+    ) { paddingValues ->
+        when (state) {
+            is ProductDetailsState.Loading -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
             }
-        }
 
-        is ProductDetailsState.Success -> {
-            ProductDetailScreenSuccessContent(
-                product = state.product,
-                onAddToCart = onAddToCart
-            )
+            is ProductDetailsState.Error -> {
+                LaunchedEffect(Unit) {
+                    snackbarHostState.showSnackbar(
+                        message = "Error loading product details"
+                    )
+                }
+            }
+
+            is ProductDetailsState.Success -> {
+                ProductDetailScreenSuccessContent(
+                    product = state.product,
+                    onAddToCart = onAddToCart
+                )
+            }
         }
     }
 }

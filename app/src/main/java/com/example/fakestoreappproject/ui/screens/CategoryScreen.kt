@@ -37,6 +37,13 @@ import com.example.fakestoreappproject.data.model.Category
 import com.example.fakestoreappproject.ui.viewmodels.CategoryState
 import com.example.fakestoreappproject.ui.viewmodels.CategoryViewModel
 import org.koin.compose.viewmodel.koinViewModel
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
 
 @Composable
 fun CategoriesScreen(
@@ -47,25 +54,46 @@ fun CategoriesScreen(
 }
 
 @Composable
-private fun CategoriesScreenContent(state: CategoryState, viewModel: CategoryViewModel) {
-    when (state) {
-        is CategoryState.Loading -> {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
-            }
-        }
+private fun CategoriesScreenContent(
+    state: CategoryState,
+    viewModel: CategoryViewModel
+) {
+    val snackbarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
 
-        is CategoryState.Error -> {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("Error loading categories")
+    Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) }
+    ) { paddingValues ->
+        when (state) {
+            is CategoryState.Loading -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
             }
-        }
 
-        is CategoryState.Success -> {
-            CategoriesScreenSuccessContent(
-                categories = state.categories,
-                onCategoryClick = viewModel::onCategoryClick
-            )
+            is CategoryState.Error -> {
+                // Show Snackbar when error occurs
+                LaunchedEffect(Unit) {
+                    coroutineScope.launch {
+                        snackbarHostState.showSnackbar(
+                            message = "Error loading categories",
+                            actionLabel = "Retry"
+                        )
+                    }
+                }
+            }
+
+            is CategoryState.Success -> {
+                CategoriesScreenSuccessContent(
+                    categories = state.categories,
+                    onCategoryClick = viewModel::onCategoryClick
+                )
+            }
         }
     }
 }
