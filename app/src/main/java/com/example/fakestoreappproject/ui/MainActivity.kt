@@ -5,10 +5,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresPermission
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import com.example.fakestoreappproject.ui.utils.NetworkMonitor
-import com.example.fakestoreappproject.ui.themes.FakeStoreAppProjectTheme
+
 private lateinit var networkMonitor: NetworkMonitor
 
 
@@ -20,6 +18,7 @@ class MainActivity : ComponentActivity() {
 
         }
     }
+
     @RequiresPermission(Manifest.permission.ACCESS_NETWORK_STATE)
     override fun onStart() {
         super.onStart()

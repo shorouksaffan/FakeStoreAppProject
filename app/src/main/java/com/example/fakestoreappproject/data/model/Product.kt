@@ -1,8 +1,5 @@
 package com.example.fakestoreappproject.data.model
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-
 data class Product(
     val category: Category,
     val creationAt: String,
