@@ -1,5 +1,5 @@
 package com.example.fakestoreappproject.ui.screens
-import com.example.fakestoreappproject.data.model.Product
+
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,6 +13,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddShoppingCart
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -24,13 +25,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.fakestoreappproject.data.model.Category
-import androidx.compose.material3.ButtonDefaults
-
+import com.example.fakestoreappproject.data.model.Product
 
 
 @Composable
@@ -42,13 +42,20 @@ fun ProductDetailScreen(
         containerColor = Color(0xFFE8EAF6)
     ) { padding ->
         Column(
-            modifier = Modifier.fillMaxSize().padding(padding).verticalScroll(rememberScrollState()).padding(horizontal = 16.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             AsyncImage(
                 model = product.images.firstOrNull(),
                 contentDescription = product.title,
-                modifier = Modifier.fillMaxWidth().height(280.dp).clip(RoundedCornerShape(16.dp)),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(280.dp)
+                    .clip(RoundedCornerShape(16.dp)),
                 contentScale = ContentScale.Crop
             )
             Spacer(modifier = Modifier.height(30.dp))
@@ -83,7 +90,7 @@ fun ProductDetailScreen(
                 Icon(
                     Icons.Default.AddShoppingCart,
                     contentDescription = null,
-                    tint = Color(0xFF7B1FA2) 
+                    tint = Color(0xFF7B1FA2)
                 )
                 Spacer(Modifier.width(10.dp))
                 Text(

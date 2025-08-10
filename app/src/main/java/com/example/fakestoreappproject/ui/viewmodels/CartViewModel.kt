@@ -44,10 +44,10 @@ class CartViewModel(
         }
     }
 
-    fun deleteCartItem(productId: Int) {
+    fun deleteCartItem(cartItem: CartItem) {
         viewModelScope.launch {
             try {
-                productRepository.deleteCartItem(productId)
+                productRepository.deleteCartItem(cartItem.product.id)
                 _cartState.value = CartState.Success(productRepository.getCartItems())
             } catch (e: Exception) {
                 _cartState.value = CartState.Error(e.message ?: "Unknown error")
